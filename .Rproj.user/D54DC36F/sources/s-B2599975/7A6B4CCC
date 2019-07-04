@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562187902573.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "7A6B4CCC",
+    "lastKnownWriteTime" : 1562230316,
+    "last_content_update" : 1562232761281,
+    "path" : "~/R Projects/Fallstudie/Fallstudie.R",
+    "project_path" : "Fallstudie.R",
+    "properties" : {
+        "cursorPosition" : "50,36",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
