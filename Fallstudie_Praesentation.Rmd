@@ -1,0 +1,91 @@
+---
+title: "Fallstudie"
+author: "Simon Hagmann"
+date: "7 7 2019"
+output: slidy_presentation
+---
+
+```{r echo = FALSE}
+source("Fallstudie.R")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Data Exploration
+```{r, echo = FALSE}
+summary(blood_train)
+```
+
+
+## Number of Donations
+
+```{r, echo = FALSE}
+summary(blood_train)
+
+numDonations
+
+monthsSinceLastDonation
+```
+
+- The mean number of donations is 5.427
+- The mean number of months since the last donation is 9.439.
+
+
+
+## Total Volume Donated in cc (cm^3)
+```{r, echo = FALSE}
+summary(blood_train$volume)
+
+volumeDonatedTotal
+
+volumeDonated
+```
+
+- The mean total volume is 1357cc
+
+
+
+## Correlations
+```{r, echo = FALSE}
+correlation
+
+correlation2
+```
+
+
+## Models
+
+### Data Splitting
+```{r, echo = TRUE}
+partition_blood <- createDataPartition(blood_train[,1], times = 1, p = 0.75,list = FALSE)
+train <- blood_train[partition_blood,] # Create the training sample
+test = blood_train[-partition_blood,] # Create the test sample
+
+dim(train)
+dim(test)
+```
+
+
+## Random Forest
+```{r, echo = TRUE}
+model.rf = randomForest(diddonate ~ ., 
+                        data = train, ntree = 40)
+score=predict(model.rf,newdata=test)
+confusionMatrix(score,test$diddonate)
+```
+
+
+## k Nearest Neighbor
+```{r, echo = TRUE}
+tune.grid=expand.grid(k=c(1:30))
+model=train(diddonate~.,method='knn',data=train,tuneGrid=tune.grid)
+model
+score=predict(model,newdata=test)
+confusionMatrix(score,test$diddonate)
+```
+
+
+## Conclusion
+- The  k-Nearest Neighbor algorithm seems to be the better choice compared to the Random Forest algorithm.
