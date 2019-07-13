@@ -1,11 +1,11 @@
 ---
-title: "Fallstudie"
+title: "Vorhersage der Bereitschaft für die Blutspende im Jahr 2007"
 author: "Simon Hagmann"
-date: "7 7 2019"
+date: "07.07.2019"
 output: slidy_presentation
 ---
 
-```{r echo = FALSE}
+```{r echo = FALSE, message = FALSE}
 source("Fallstudie.R")
 ```
 
@@ -13,13 +13,31 @@ source("Fallstudie.R")
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
+## Einleitung
+
+* Explorative Datenanalyse
+* Erstellen von Visualisierungen, um einen Überblick über die Daten zu erhalten.
+* Aufzeigen der Korrelationen
+* Aufbauen von Algorithmen
+* Vergleichen der Algorithmen und den besten auswählen
+
+
+## Eingesetzte Libraries
+
+* tidyverse
+* caret
+* corrgram
+* randomForest
+
+
 ## Data Exploration
 ```{r, echo = FALSE}
 summary(blood_train)
 ```
 
 
-## Number of Donations
+## Anzahl Blutspenden
 
 ```{r, echo = FALSE}
 summary(blood_train)
@@ -29,13 +47,13 @@ numDonations
 monthsSinceLastDonation
 ```
 
-- The mean number of donations is 5.427
-- The mean number of months since the last donation is 9.439.
+- Die durchschnittliche Anzahl an Bluespenden ist 5.427
+- Die durchschnittliche Anzahl Monate seit der letzten Blutspende ist 9.439
 
 
 
-## Total Volume Donated in cc (cm^3)
-```{r, echo = FALSE}
+## Totales Volume gespendet in cc (cm^3)
+```{r, echo = FALSE, warning=FALSE}
 summary(blood_train$volume)
 
 volumeDonatedTotal
@@ -43,21 +61,19 @@ volumeDonatedTotal
 volumeDonated
 ```
 
-- The mean total volume is 1357cc
+- Das Durchschnittsvolumen ist 1357cm^3
 
 
 
-## Correlations
-```{r, echo = FALSE}
+## Korrelationen
+```{r, echo = FALSE, warning=FALSE}
 correlation
 
 correlation2
 ```
 
 
-## Models
-
-### Data Splitting
+## Data Splitting
 ```{r, echo = TRUE}
 partition_blood <- createDataPartition(blood_train[,1], times = 1, p = 0.75,list = FALSE)
 train <- blood_train[partition_blood,] # Create the training sample
@@ -86,6 +102,19 @@ score=predict(model,newdata=test)
 confusionMatrix(score,test$diddonate)
 ```
 
+## k Nearest Neighbor mit LogLoss
+```{r, echo = TRUE}
+tune.grid=expand.grid(k=c(1:30))
+model=train(diddonate~.,method='knn',metric='LogLoss',data=train,tuneGrid=tune.grid)
+model
+score=predict(model,newdata=test)
+confusionMatrix(score,test$diddonate)
+```
 
-## Conclusion
-- The  k-Nearest Neighbor algorithm seems to be the better choice compared to the Random Forest algorithm.
+
+## Fazit
+- Der kNN Algorithmus mit LogLoss scheint im Vergleich zum random forest eine höhere Genauigkeit zu haben. Daher fällt der Entscheid auf diesen.
+- kNN ohne LogLoss hat eine niedrigere Genauigkeit.
+
+- Link zum R Code
+https://github.com/hagmann/data-science-uci-blood-transfusion
